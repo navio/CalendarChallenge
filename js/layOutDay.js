@@ -25,10 +25,13 @@ var layOutDay = (function(view_width,view_height){
   // Sort elements by start date and lenght, return formatted structure.
   function sortAndFormat(events){
 
-    // sorting by start time.
+    // sorting by start time and duration of event.
     events.sort(function(a,b){
-      if (a.value < b.value) return 1;
-      return 0
+      if((a.start - b.start) === 0) {
+        return b.end - a.end;
+      } else {
+        return a.start - b.start;
+      }
     });
 
     // Set format for easy location.
