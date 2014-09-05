@@ -41,7 +41,7 @@ var layOutDay = (function(view_width,view_height){
           end:      ev.end,
           duration: ev.end - ev.start,
           id:       i,
-          level:    0,
+          column:    0,
           row:      0
         };
     });
@@ -72,20 +72,22 @@ var layOutDay = (function(view_width,view_height){
           //new column.
           if(column[i] === undefined){
             column[i] = event;
+            event.column = 0;
             if(i == 0){
               ++stack;
               row[stack] = [event]; //new event stack;
             }else{
-              row[stack].push(event);
+              row[stack].push(event); // add to stack;
             }
-            return true;
+            return i;
           }
 
           //event fits in current column
           if( event.start >= column[i].end ){
-            column[i] = event;  // column where its added.
-            row[stack].push(event); // add to the stack (number of events)
-            return true;
+            column[i] = event;  // new last event of this column.
+            event.column = i;
+            row[stack].push(event); // add to the stack/row (number of events)
+            return i;
           }
 
           //check next column.
@@ -99,7 +101,7 @@ var layOutDay = (function(view_width,view_height){
     var cal = new Calendar();
 
     events.forEach(function(event){
-        cal.add(event);
+        var eventDeep = cal.add(event);
     });
 
     return cal;
@@ -107,7 +109,44 @@ var layOutDay = (function(view_width,view_height){
 
   // Correctly format calendar and events to be rendered.
   function render(calendar){
-    rows = calendar.getRows(), num_coumns = getColumns;
+    var rows = calendar.getRows(); //Events in the same line;
+    var columns = getColumns.length + 1; //Schedule max Column
+    var events = [];
+    var events_size = (view_width/columns);
+
+    rows.forEach(function(row,rowIt){
+      // Place to identify current lenght, verify no collitions magicMethod()
+      row.forEach(function(event, eventIt){
+        events.push(renderEvent(event));
+      });
+    });
+
+    function renderEvent(event){
+      // "margin-top:120px; event.start
+      //  width:50%; row.lenght
+      //  height: 60px;
+      //  margin-left:33%;
+      //  "
+
+      var margintop = event.start + "px";
+      var height = event.duration + "px";
+      var width = event_size + "px";
+      var _ofElement = ( 100 / columns );
+      var marginleft = (( event.column * _ofElement ) - _ofElement) + "%";
+
+      var style = "elements";
+
+      var eventHMTL = "<div class='event'>"getRealTime(event.start)"</div>";
+      eventHTML.setParam("style",style);
+
+      return eventHTML;
+
+    }
+
+
+    function getRealTime(time){
+      return time;
+    }
 
     return calendar;
   }
