@@ -59,34 +59,38 @@ var layOutDay = (function(view_width,view_height){
   function setEvents(events){
 
     function calendar(){
-      var column = [] , events = [] , row = 0
+      var column = [] , row = [], stack = -1;
+
+      function getRows(){
+        return row;
+      }
+
+      function getColumns(){
+        return column
+      }
 
       function add(event){
-        event.level = whichColumn(event);
-        event.row = row;
-        events.push(level);
-      }
-
-      function getEvents(){
-        return events;
-      }
-
-      function whichColumn(event){
 
         var i = 0;
         while(true){
 
           //new column.
           if(column[i] === undefined){
-            column[i] = event.end;
-            if(i == 0) ++row; //new row
-            return i;
+            column[i] = event;
+            if(i == 0){
+              ++stack;
+              row[stack] = [event]; //new event stack;
+            }else{
+              row[stack].push(event);
+            }
+            return true;
           }
 
           //event fits in current column
-          if( event.start > column[i] && event.end > column[i] ){
-            column[i] = event.end;
-            return i;
+          if( event.start >= column[i].end ){
+            column[i] = event;  // column where its added.
+            row[stack].push(event); // add to the stack (number of events)
+            return true;
           }
 
           //check next column.
