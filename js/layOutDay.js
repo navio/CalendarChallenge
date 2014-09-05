@@ -35,11 +35,8 @@ var layOutDay = (function(view_width,view_height){
     });
 
     // Set format for easy location.
-    format_events = [];
-    items.forEach(function(ev,i){
-
-      var element =
-        {
+    return items.map(function(ev,i) {
+        return {
           start:    ev.start,
           end:      ev.end,
           duration: ev.end - ev.start,
@@ -47,29 +44,27 @@ var layOutDay = (function(view_width,view_height){
           level:    0,
           row:      0
         };
-
-      format_events.push(element);
-
     });
-
-    return format_events;
   }
 
   // Create Calendar Strucuture and Add Events to it
   function setEvents(events){
 
-    function calendar(){
+    function Calendar(){
       var column = [] , row = [], stack = -1;
 
-      function getRows(){
+      this.getRows =
+      function(){
         return row;
-      }
+      };
 
-      function getColumns(){
+      this.getColumns =
+      function(){
         return column
-      }
+      };
 
-      function add(event){
+      this.add =
+      function(event){
 
         var i = 0;
         while(true){
@@ -97,21 +92,22 @@ var layOutDay = (function(view_width,view_height){
           ++i
         }
 
-      }
+      };
 
     }
 
-    var cal = calendar();
+    var cal = new Calendar();
 
     events.forEach(function(event){
         cal.add(event);
     });
 
-    return cal.getEvents();
+    return cal;
   }
 
   // Correctly format calendar and events to be rendered.
   function render(calendar){
+    rows = calendar.getRows(), num_coumns = getColumns;
 
     return calendar;
   }
