@@ -1,97 +1,19 @@
 <html>
   <head>
-    <title>Example - LayOutDay</title>
-
+    <title>Example - Calendar</title>
+    <link rel="stylesheet" href="css/calendar.css">
   </head>
   <body>
-    <div id="dayEvents">
-      <div style="" class="event">9:00</div>
-
-      <div style="margin-top:120px;
-                  width:50%;
-                  height: 60px;
-                 "
-           class="event">11:00
-      </div>
-      <div style="margin-top:120px;
-                  margin-left:50%;
-                  width:50%;
-                  height: 30px;
-                  "
-           class="event">11:00
-      </div>
-
-      <div style="margin-top:180px;
-                  margin-left:33%;
-                  width:33%;
-                  height:160px;
-                  "
-           class="event">12:00
-      </div>
-
-      <div style="margin-top:200px;
-                  margin-left:66%;
-                  width:34%;
-                  height:80px;
-                  "
-           class="event">12:20
-      </div>
-
-      <div style="margin-top:180px;
-                  margin-left:0%;
-                  width:33%;
-                  height:80px;
-                  "
-           class="event">12:00
-      </div>
-
-      <div style="margin-top:330px;
-                  margin-left:0%;
-                  width:33%;
-                  height:120px;
-                  "
-           class="event">13:50
-      </div>
-      <div style="margin-top:560px;
-                  margin-left:25%;
-                  width:25%;
-                  height:120px;
-                  "
-           class="event">3:00
-      </div>
-      <div style="margin-top:560px;
-                  margin-left:50%;
-                  width:25%;
-                  height:120px;
-                  "
-           class="event">3:00
-      </div>
-      <div style="margin-top:560px;
-                  margin-left:75%;
-                  width:25%;
-                  height:120px;
-                  "
-           class="event">3:00
-      </div>
-
-    </div>
+    <div id="dayEvents"> </div>
   </body>
+  <script src="js/layOutDay.js"> </script>
 
-  <style media="screen">
-    #dayEvents{
-      border: 1px solid black;
-      height: 720px;
-      width: 600px;
-      dispay: block;
-      position: relative;
-    }
-
-    .event{
-      position: absolute;
-      width: 100%;
-      border: 1px solid blue;
-    }
-
-
-  </style>
+  <script charset="utf-8">
+    document.querySelector("#dayEvents").innerHTML = layOutDay([
+                                {start:0,end:120},
+                                {start:10,end:120},
+                                {start:60,end:120},
+                                {start:120,end:220}
+                              ]);
+  </script>
 </html>

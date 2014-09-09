@@ -124,17 +124,15 @@ var layOutDay = (function(view_width,view_height){
 
     function renderEvent(event){
       var styles = [], _colWidth = ( 100 / columns );
+
       styles.push('margin-top:'+event.start + "px");
       styles.push('height:'+event.duration + "px");
       styles.push('width:'+events_size + "px");
       styles.push('margin-left:'+(( event.column * _colWidth )) + "%");
 
-
-      styles = styles.join(" ");
+      styles = styles.join("; ");
 
       var eventHTML = "<div style='"+styles+"' class='event'>"+getRealTime(event.start)+"</div>";
-      //eventHTML.setParam("style",style);
-
       return eventHTML;
 
     }
@@ -167,5 +165,3 @@ var layOutDay = (function(view_width,view_height){
   };
 
 })(600,720);
-
-console.log(layOutDay([{start:0,end:120},{start:10,end:120},{start:60,end:120},{start:120,end:220}]));
