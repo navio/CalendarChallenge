@@ -42,13 +42,12 @@ var layOutDay = (function(view_width,view_height){
           end:      ev.end,
           duration: ev.end - ev.start,
           id:       i,
-          column:    0,
-          row:      0
+          column:   0
         };
     });
   }
 
-  // Create Calendar Strucuture and Add Events to it
+  // Create Calendar Strucuture and Add Events to columns.
   function setEvents(events){
 
     function Calendar(){
@@ -110,7 +109,7 @@ var layOutDay = (function(view_width,view_height){
     return cal;
   }
 
-  // Correctly format calendar and events to be rendered.
+  // Loop thru events and HTML rendered.
   function render(calendar){
     var rows = calendar.getRows(); //Events in the same line;
     var columns = calendar.getColumns().length; //Schedule max Column
@@ -119,23 +118,21 @@ var layOutDay = (function(view_width,view_height){
 
     rows.forEach(function(row,rowIt){
       row.forEach(function(event, eventIt){
-
         events.push(renderEvent(event));
       });
     });
 
     function renderEvent(event){
-      var styles = [];
-      var _ofElement = ( 100 / columns );
+      var styles = [], _colWidth = ( 100 / columns );
       styles.push('margin-top:'+event.start + "px");
       styles.push('height:'+event.duration + "px");
       styles.push('width:'+events_size + "px");
-      styles.push('margin-left:'+(( event.column * _ofElement )) + "%");
+      styles.push('margin-left:'+(( event.column * _colWidth )) + "%");
 
 
-      var style = styles.join(" ");
+      styles = styles.join(" ");
 
-      var eventHTML = "<div style='"+style+"' class='event'>"+getRealTime(event.start)+"</div>";
+      var eventHTML = "<div style='"+styles+"' class='event'>"+getRealTime(event.start)+"</div>";
       //eventHTML.setParam("style",style);
 
       return eventHTML;
@@ -144,7 +141,7 @@ var layOutDay = (function(view_width,view_height){
 
     function getRealTime(time){
       var _hour = Math.round((540 + time)/60) , _min = time % 60;
-      if(_min == 0) _min = _min+'0';
+      if(_min === 0) _min = _min+'0';
       return _hour +':'+ _min;
     }
 
