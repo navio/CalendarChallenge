@@ -75,15 +75,12 @@ var layOutDay = (function(view_width,view_height){
           if(column[i] === undefined){
 
             if(i == 0){
-
-              console.log('start row',event,stack,i);
               ++stack;
               event.column = i;
               event.row = stack;
               row[stack] = [event]; //new event stack;
 
             }else{
-              console.log('add to row 1',event,stack,i);
               event.row = stack;
               event.column = i;
               row[stack].push(event); // add to stack;
@@ -96,20 +93,17 @@ var layOutDay = (function(view_width,view_height){
           //event fits in current column
           if( event.start >= column[i].end ){
 
-
             if( i == 0 ){
-              console.log('start row 1',event,stack,i);
               ++stack;
               event.column = i;
               event.row = stack;
               row[stack] = [event]; //new event stack;
-
             }else{
-              console.log('add to row 3',event,stack,i);
               event.row = stack;
               event.column = i;
               row[stack].push(event); // add to the stack/row (number of events)
             }
+
             column[i] = event;  // new last event of this column.
             return i;
           }
@@ -142,10 +136,12 @@ var layOutDay = (function(view_width,view_height){
     rows.forEach(function(row,rowIt){
       var events_inRow = row.length;
 
-      console.log(rowIt,row );
-      //if( row[events_inRow-1].column > events_inRow ){ events_inRow = row[events_inRow].column }
+      if( row[events_inRow-1].column > events_inRow ){ events_inRow = row[events_inRow-1].column }
+
+      // if event ending collide with deeper. Column. Follow Master Arrangement. 
+
       row.forEach(function(event, eventIt){
-        events.push(renderEvent(event,event_size));
+        events.push(renderEvent(event,events_inRow));
       });
     });
 
@@ -155,7 +151,7 @@ var layOutDay = (function(view_width,view_height){
 
       styles.push('margin-top:'+event.start + "px");
       styles.push('height:'+event.duration + "px");
-      styles.push('width:'+ ( events_size ) + "px");
+      styles.push('width:'+ ( event_size ) + "px");
       styles.push('margin-left:'+(( event.column * _colWidth )) + "%");
 
       styles = styles.join("; ");
