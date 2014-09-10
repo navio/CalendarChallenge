@@ -127,12 +127,14 @@ var layOutDay = (function(view_width,view_height){
 
       styles.push('margin-top:'+event.start + "px");
       styles.push('height:'+event.duration + "px");
-      styles.push('width:'+events_size + "px");
+      styles.push('width:'+ ( events_size ) + "px");
       styles.push('margin-left:'+(( event.column * _colWidth )) + "%");
 
       styles = styles.join("; ");
 
-      var eventHTML = "<div style='"+styles+"' class='event'>"+getRealTime(event.start)+"</div>";
+      var eventHTML = "<div style='"+styles+"' class='event'>"
+                      //  + getRealTime(event.start)
+                       +"</div>";
       return eventHTML;
 
     }
@@ -140,10 +142,11 @@ var layOutDay = (function(view_width,view_height){
     function getRealTime(time){
       var _hour = Math.round((540 + time)/60) , _min = time % 60;
       if(_min === 0) _min = _min+'0';
+      if( _hour > 12) _hour = _hour - 12;
       return _hour +':'+ _min;
     }
 
-    return events;
+    return events.join("");
   }
 
   return function readyEvents(events){
