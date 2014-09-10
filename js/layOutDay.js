@@ -42,7 +42,8 @@ var layOutDay = (function(view_width,view_height){
           end:      ev.end,
           duration: ev.end - ev.start,
           id:       i,
-          column:   0
+          column:   0,
+          row:      0
         };
     });
   }
@@ -51,7 +52,7 @@ var layOutDay = (function(view_width,view_height){
   function setEvents(events){
 
     function Calendar(){
-      var column = [] , row = [], stack = -1;
+      var column = [] , row = [], stack = 0;
 
       this.getRows =
       function(){
@@ -72,23 +73,44 @@ var layOutDay = (function(view_width,view_height){
 
           //new column.
           if(column[i] === undefined){
-            column[i] = event;
+
             if(i == 0){
-              event.column = 0;
+
+              console.log('start row',event,stack,i);
               ++stack;
+              event.column = i;
+              event.row = stack;
               row[stack] = [event]; //new event stack;
+
             }else{
+              console.log('add to row 1',event,stack,i);
+              event.row = stack;
               event.column = i;
               row[stack].push(event); // add to stack;
             }
+
+            column[i] = event;
             return i;
           }
 
           //event fits in current column
           if( event.start >= column[i].end ){
+
+
+            if( i == 0 ){
+              console.log('start row 1',event,stack,i);
+              ++stack;
+              event.column = i;
+              event.row = stack;
+              row[stack] = [event]; //new event stack;
+
+            }else{
+              console.log('add to row 3',event,stack,i);
+              event.row = stack;
+              event.column = i;
+              row[stack].push(event); // add to the stack/row (number of events)
+            }
             column[i] = event;  // new last event of this column.
-            event.column = i;
-            row[stack].push(event); // add to the stack/row (number of events)
             return i;
           }
 
@@ -112,18 +134,24 @@ var layOutDay = (function(view_width,view_height){
   // Loop thru events and HTML rendered.
   function render(calendar){
     var rows = calendar.getRows(); //Events in the same line;
-    var columns = calendar.getColumns().length; //Schedule max Column
+    // var max_columns = calendar.getColumns().length; //Schedule max Column
     var events = [];
-    var events_size = (view_width/columns);
+    // var events_size = (view_width/columns);
+    // var events_inRow;
 
     rows.forEach(function(row,rowIt){
+      var events_inRow = row.length;
+
+      console.log(rowIt,row );
+      //if( row[events_inRow-1].column > events_inRow ){ events_inRow = row[events_inRow].column }
       row.forEach(function(event, eventIt){
-        events.push(renderEvent(event));
+        events.push(renderEvent(event,event_size));
       });
     });
 
-    function renderEvent(event){
-      var styles = [], _colWidth = ( 100 / columns );
+    function renderEvent(event,realSize){
+      var styles = [], _colWidth = ( 100 / realSize );
+      var event_size = (view_width/realSize); // change for higher column value + 1
 
       styles.push('margin-top:'+event.start + "px");
       styles.push('height:'+event.duration + "px");
