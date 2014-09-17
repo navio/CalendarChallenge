@@ -128,22 +128,51 @@ var layOutDay = (function(view_width,view_height){
   // Loop thru events and HTML rendered.
   function render(calendar){
     var rows = calendar.getRows(); //Events in the same line;
-    // var max_columns = calendar.getColumns().length; //Schedule max Column
+    var max_columns = calendar.getColumns().length; //Schedule max Column
     var events = [];
     // var events_size = (view_width/columns);
     // var events_inRow;
+    var deep = [{start:-1,end:-1}];
 
     rows.forEach(function(row,rowIt){
       var events_inRow = row.length;
 
-      if( row[events_inRow-1].column > events_inRow ){ events_inRow = row[events_inRow-1].column }
+      //if( row[events_inRow-1].column > events_inRow ){ events_inRow = row[events_inRow-1].column }
 
-      // if event ending collide with deeper. Column. Follow Master Arrangement. 
+    //  if(checkForCollision(row,deep)){ events_inRow = max_columns; }
+
+      deep.push({start:row[0].start, end:row[0].end});
 
       row.forEach(function(event, eventIt){
+
+        if(deep[rowIt].end < event.end) deep[rowIt].end = event.end;
+        console.log()
         events.push(renderEvent(event,events_inRow));
+
       });
     });
+
+    function checkForCollision(row,deep){
+      console.log('cfc r d',row,deep);
+      for(var i=0;i<deep.length;i++){
+        for(var b=0;b<row.length;b++){
+
+          if(deep[i].end > row[b].end){   // if prev row ends after our current row.
+             console.log(deep[i] , row[b]);
+             return true;
+          }
+
+
+          if(deep[i].end > row[b].start ){ //if current row start before prev is complete.
+             console.log(deep[i] , row[b]);
+             return true;
+          }
+
+        }
+      }
+
+      return false;
+    }
 
     function renderEvent(event,realSize){
       var styles = [], _colWidth = ( 100 / realSize );
