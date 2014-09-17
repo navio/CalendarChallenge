@@ -130,48 +130,50 @@ var layOutDay = (function(view_width,view_height){
     var rows = calendar.getRows(); //Events in the same line;
     var max_columns = calendar.getColumns().length; //Schedule max Column
     var events = [];
-    // var events_size = (view_width/columns);
-    // var events_inRow;
-    var deep = [{start:-1,end:-1}];
+    var duration = [{start:-1,end:-1}]; // To initialize Array.
 
     rows.forEach(function(row,rowIt){
-      var events_inRow = row.length;
 
-      //if( row[events_inRow-1].column > events_inRow ){ events_inRow = row[events_inRow-1].column }
+      var eventsByRow = getRowDeepness(row);//row.length;
+      var collisionRow = checkForCollision(row,duration);
 
-    //  if(checkForCollision(row,deep)){ events_inRow = max_columns; }
+      if(collisionRow > -1 ){ // If A collission is found.
+          eventsByRow = getRowDeepness(rows[collisionRow]); //Adopt Collision Schema.
+      }
 
-      deep.push({start:row[0].start, end:row[0].end});
+      duration.push({start:row[0].start, end:row[0].end}); //push duration schema.
 
       row.forEach(function(event, eventIt){
-
-        if(deep[rowIt].end < event.end) deep[rowIt].end = event.end;
-        console.log()
-        events.push(renderEvent(event,events_inRow));
-
+        // Update for the deepest duration in the calendar.
+        if(duration[rowIt].end < event.end) duration[rowIt].end = event.end;
+        events.push(renderEvent(event,eventsByRow));
       });
     });
 
+    function getRowDeepness(row){ // How deep is the row?
+      var deepest = row[0].column;
+      row.forEach(function(event){
+        if(deepest < event.column) deepest = event.column;
+      });
+      return deepest + 1; // +1 to fix into real columns 
+    }
+
     function checkForCollision(row,deep){
-      console.log('cfc r d',row,deep);
       for(var i=0;i<deep.length;i++){
         for(var b=0;b<row.length;b++){
 
           if(deep[i].end > row[b].end){   // if prev row ends after our current row.
-             console.log(deep[i] , row[b]);
-             return true;
+             return i;
           }
 
-
           if(deep[i].end > row[b].start ){ //if current row start before prev is complete.
-             console.log(deep[i] , row[b]);
-             return true;
+             return i;
           }
 
         }
       }
 
-      return false;
+      return -1;
     }
 
     function renderEvent(event,realSize){
