@@ -61,7 +61,7 @@ var layOutDay = (function(view_width,view_height){
 
       this.getColumns =
       function(){
-        return column
+        return column;
       };
 
       this.add =
@@ -74,7 +74,7 @@ var layOutDay = (function(view_width,view_height){
           //new column.
           if(column[i] === undefined){
 
-            if(i == 0){
+            if(i === 0){
               ++stack;
               event.column = i;
               event.row = stack;
@@ -93,7 +93,7 @@ var layOutDay = (function(view_width,view_height){
           //event fits in current column
           if( event.start >= column[i].end ){
 
-            if( i == 0 ){
+            if( i === 0 ){
               ++stack;
               event.column = i;
               event.row = stack;
@@ -109,7 +109,7 @@ var layOutDay = (function(view_width,view_height){
           }
 
           //check next column.
-          ++i
+          ++i;
         }
 
       };
@@ -119,7 +119,7 @@ var layOutDay = (function(view_width,view_height){
     var cal = new Calendar();
 
     events.forEach(function(event){
-        var eventDeep = cal.add(event);
+        cal.add(event);
     });
 
     return cal;
@@ -138,12 +138,12 @@ var layOutDay = (function(view_width,view_height){
       var collisionRow = checkForCollision(row,duration);
 
       if(collisionRow > -1 ){ // If A collission is found.
-          eventsByRow = getRowDeepness(rows[collisionRow]); //Adopt Collision Schema.
+          eventsByRow = getRowDeepness(rows[collisionRow]); //Adopt Collision Row Schema.
       }
 
       duration.push({start:row[0].start, end:row[0].end}); //push duration schema.
 
-      row.forEach(function(event, eventIt){
+      row.forEach(function(event){
         // Update for the deepest duration in the calendar.
         if(duration[rowIt].end < event.end) duration[rowIt].end = event.end;
         events.push(renderEvent(event,eventsByRow));
@@ -155,7 +155,7 @@ var layOutDay = (function(view_width,view_height){
       row.forEach(function(event){
         if(deepest < event.column) deepest = event.column;
       });
-      return deepest + 1; // +1 to fix into real columns 
+      return deepest + 1; // +1 to fix into real columns
     }
 
     function checkForCollision(row,deep){
@@ -187,9 +187,9 @@ var layOutDay = (function(view_width,view_height){
 
       styles = styles.join("; ");
 
-      var eventHTML = "<div style='"+styles+"' class='event'>"
+      var eventHTML = "<div style='"+styles+"' class='event'>" +
                       //  + getRealTime(event.start)
-                       +"</div>";
+                      "</div>";
       return eventHTML;
 
     }
@@ -215,7 +215,7 @@ var layOutDay = (function(view_width,view_height){
     events = sortAndFormat(events);
 
     // Add Events to Structure
-    calendar = setEvents(events)
+    calendar = setEvents(events);
 
     // Return formated data to Render
     return render(calendar);
