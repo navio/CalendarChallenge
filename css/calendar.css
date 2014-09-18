@@ -5,24 +5,13 @@ body {
     font-family: 'lucida grande', tahoma, verdana, arial, sans-serif;
 }
 
-::-moz-selection {
-    background: #b3d4fc;
-    text-shadow: none;
-}
-
-::selection {
-    background: #b3d4fc;
-    text-shadow: none;
-}
-
 .wrapper {
-    /*margin: 20px auto;*/
     overflow: hidden;
     width: 695px;
     padding: 10px 0;
 }
 
-.times {
+.tempus {
     float: left;
     width: 65px;
     height: 730px;
@@ -35,21 +24,21 @@ body {
     position: relative;
 }
 
-.times > li {
+.tempus > li {
     height: 30px;
     line-height: 30px;
 }
 
-.times > li:nth-child(even) { /*small*/
+.tempus > li:nth-child(even) { /*small*/
     font-size: 7pt;
 }
 
-.times > li:nth-child(odd) { /*big*/
+.tempus > li:nth-child(odd) { /*big*/
     color: #686868;
     font-weight: bold;
 }
 
-.times > li:nth-child(odd) > small {
+.tempus > li:nth-child(odd) > small {
     margin-left: 5px;
     font-size: 8pt;
     color: #a7a7a7;
@@ -92,18 +81,19 @@ body {
     background: #4b6ea9;
 }
 
-.event > dl > dt {
+.event h2 {
     cursor: pointer;
     margin: 0;
     padding: 0 0 0 0;
     color: #4c6fa9;
     font-weight: bold;
-    font-size: 8pt
+    font-size: 9pt;
+    padding-left: 8px;
 }
 
-.event > dl > dd {
+.event span {
     margin: 0;
-    padding: 0;
+    padding-left: 10px;
     color: #797979;
     font-size: 7pt;
 }

@@ -72,6 +72,7 @@ var layOutDay = (function(view_width,view_height){
         while(true){
 
           //new column.
+
           if(column[i] === undefined){
 
             if(i === 0){
@@ -89,7 +90,6 @@ var layOutDay = (function(view_width,view_height){
             column[i] = event;
             return i;
           }
-
           //event fits in current column
           if( event.start >= column[i].end ){
 
@@ -136,9 +136,10 @@ var layOutDay = (function(view_width,view_height){
 
       var eventsByRow = getRowDeepness(row);//row.length;
       var collisionRow = checkForCollision(row,duration);
-
+      console.log(collisionRow,rows[collisionRow])
       if(collisionRow > -1 ){ // If A collission is found.
-          eventsByRow = getRowDeepness(rows[collisionRow]); //Adopt Collision Row Schema.
+          if(getRowDeepness(rows[collisionRow]) > eventsByRow )
+            eventsByRow = getRowDeepness(rows[collisionRow]); //Adopt Collision Row Schema.
       }
 
       duration.push({start:row[0].start, end:row[0].end}); //push duration schema.
@@ -146,12 +147,14 @@ var layOutDay = (function(view_width,view_height){
       row.forEach(function(event){
         // Update for the deepest duration in the calendar.
         if(duration[rowIt].end < event.end) duration[rowIt].end = event.end;
+        console.log(event,eventsByRow);
         events.push(renderEvent(event,eventsByRow));
       });
     });
 
     function getRowDeepness(row){ // How deep is the row?
       var deepest = row[0].column;
+      console.log('r')
       row.forEach(function(event){
         if(deepest < event.column) deepest = event.column;
       });
@@ -183,12 +186,14 @@ var layOutDay = (function(view_width,view_height){
       styles.push('margin-top:'+event.start + "px");
       styles.push('height:'+event.duration + "px");
       styles.push('width:'+ ( event_size ) + "px");
-      styles.push('margin-left:'+(( event.column * _colWidth )) + "%");
+      styles.push('margin-left:'+(( event.column * _colWidth ) -.5 ) + "%");
 
       styles = styles.join("; ");
 
       var eventHTML = "<div style='"+styles+"' class='event'>" +
                       //  + getRealTime(event.start)
+                      '<h2>Sample Item</h2>'+
+                      '<span>Sample Location</span>'+
                       "</div>";
       return eventHTML;
 
